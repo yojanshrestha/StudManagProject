@@ -10,6 +10,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -160,7 +162,6 @@ public class StudentManagement extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
 					switchToLoginScreen();
 				}
 			});
@@ -369,7 +370,7 @@ public class StudentManagement extends JFrame {
 							studDoa.saveStud(stud);
 							clearData();
 							showAllStudents();
-							
+
 						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();
@@ -526,7 +527,19 @@ public class StudentManagement extends JFrame {
 	}
 
 	private void switchToLoginScreen() {
-
+		if ((Preferences) WindowManager.ui.get("pref") != null) {
+			try {
+				Preferences prefs = (Preferences) WindowManager.ui.get("pref");
+//				prefs.put("userName", "aaaa");
+				prefs.clear();
+				WindowManager.ui.put("pref", prefs);
+			} catch (BackingStoreException e) {
+				e.printStackTrace();
+			}
+			// prefs.put("userName", "a22");
+			// prefs.put("password", "a22");
+			// }
+		}
 		LoginScreenLayout loginWindow = (LoginScreenLayout) WindowManager.ui
 				.get("LoginScreenLayout");
 		loginWindow.setVisible(true);
@@ -632,13 +645,16 @@ public class StudentManagement extends JFrame {
 
 					try {
 						boolean b = studDoa.deleteStudent(id);
-						
-						// logic left to write
-						
-						JOptionPane.showMessageDialog(null,
-								"Student Record Deleted Successfully of id="
-										+ id);
-						
+
+						if (b) {
+							JOptionPane.showMessageDialog(null,
+									"Student Record Deleted Successfully of id="
+											+ id);
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"ERROR!! Record cannot be deleted. ");
+						}
+
 						showAllStudents();
 
 					} catch (SQLException e1) {
@@ -668,7 +684,7 @@ public class StudentManagement extends JFrame {
 			btnEdit = new JButton("Edit");
 			btnEdit.setIcon(new ImageIcon("resource\\edit.png"));
 			btnEdit.setHorizontalAlignment(SwingConstants.LEFT);
-			btnEdit.setBounds(176, 401, 100, 23);			
+			btnEdit.setBounds(176, 401, 100, 23);
 			btnEdit.addActionListener(new ActionListener() {
 
 				@Override
@@ -697,24 +713,25 @@ public class StudentManagement extends JFrame {
 		birthDateTxt.setText(dateString);
 		rollNoTxt.setText(stud.getRollno());
 		facultyTxt.setText(stud.getFaculty());
-		semesterComboBox.setSelectedItem((Object)stud.getSemester());
+		semesterComboBox.setSelectedItem((Object) stud.getSemester());
 		collegeNameTxt.setText(stud.getCollegeName());
 		addressTxt.setText(stud.getAddress());
-		if(stud.getGender().equals("Male")){
+		if (stud.getGender().equals("Male")) {
 			maleRadio.setSelected(true);
-		}else{
+		} else {
 			femaleRadio.setSelected(true);
 		}
-		
+
 	}
+
 	private JButton getBtnUpdate() {
 		if (btnUpdate == null) {
 			btnUpdate = new JButton("Update");
 			btnUpdate.setIcon(new ImageIcon("resource\\save.png"));
 			btnUpdate.setHorizontalAlignment(SwingConstants.LEFT);
-			btnUpdate.setBounds(259, 170, 89, 23);
+			btnUpdate.setBounds(259, 170, 100, 23);
 			btnUpdate.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
@@ -722,20 +739,27 @@ public class StudentManagement extends JFrame {
 						stud = getStudentFormData();
 						stud.setId(Integer.parseInt(idTxt.getText()));
 						if (stud != null) {
-							studDoa.updateStud(stud);
+							if (studDoa.updateStud(stud) == true) {
+								JOptionPane.showMessageDialog(null,
+										"Record updated successfully!! ");
+							} else {
+								JOptionPane.showMessageDialog(null,
+										"ERROR!! Record not updated!! ");
+							}
 							clearData();
 							showAllStudents();
-							
+
 						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
 				}
 			});
-			
+
 		}
 		return btnUpdate;
 	}
+
 	private JTextField getIdTxt() {
 		if (idTxt == null) {
 			idTxt = new JTextField();

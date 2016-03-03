@@ -8,11 +8,13 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -22,6 +24,7 @@ import javax.swing.border.TitledBorder;
 
 import com.javastud.studmproj.doa.UserDoa;
 import com.javastud.studmproj.model.User;
+
 import javax.swing.JCheckBox;
 
 public class LoginScreenLayout extends JFrame {
@@ -42,6 +45,9 @@ public class LoginScreenLayout extends JFrame {
 	private JButton cancelBtn;
 	private JButton btnRegister;
 	private JCheckBox chckbxRememberMe;
+	Preferences prefs = Preferences.userNodeForPackage(getClass());
+	static boolean skip = false;
+	public static String prefUser;
 
 	/**
 	 * Launch the application.
@@ -50,15 +56,30 @@ public class LoginScreenLayout extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+
 					LoginScreenLayout loginWindow = new LoginScreenLayout();
 					WindowManager.ui.put("LoginScreenLayout", loginWindow);
 					loginWindow.setVisible(true);
 					loginWindow.setResizable(false);
+					if (skip == true) {
+						staticSwitchToStudMangScreen();
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+
+	public static void staticSwitchToStudMangScreen() {
+		StudentManagement studMngWindow = new StudentManagement(prefUser);
+		WindowManager.ui.put("StudentManagement", studMngWindow);
+		studMngWindow.setVisible(true);
+		LoginScreenLayout loginWindow = (LoginScreenLayout) WindowManager.ui
+				.get("LoginScreenLayout");
+		loginWindow.setVisible(false);
+
 	}
 
 	/**
@@ -76,6 +97,11 @@ public class LoginScreenLayout extends JFrame {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		contentPane.add(getRightPanel(), BorderLayout.EAST);
 		contentPane.add(getCenterPanel(), BorderLayout.CENTER);
+		prefUser = prefs.get("userName", "$$$$$$$$$$");
+		if (prefUser.equals("$$$$$$$$$$") == false) {
+			skip = true;
+			WindowManager.ui.put("pref", prefs);
+		}
 	}
 
 	private JPanel getTopPanel() {
@@ -85,6 +111,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return topPanel;
 	}
+
 	private JPanel getLeftPanel() {
 		if (leftPanel == null) {
 			leftPanel = new JPanel();
@@ -92,6 +119,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return leftPanel;
 	}
+
 	private JPanel getBottomPanel() {
 		if (bottomPanel == null) {
 			bottomPanel = new JPanel();
@@ -99,6 +127,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return bottomPanel;
 	}
+
 	private JPanel getRightPanel() {
 		if (rightPanel == null) {
 			rightPanel = new JPanel();
@@ -106,6 +135,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return rightPanel;
 	}
+
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
@@ -114,12 +144,13 @@ public class LoginScreenLayout extends JFrame {
 			centerPanel.add(getPanel());
 			centerPanel.add(getStatusLbl());
 			centerPanel.add(getSignInBtn());
-			centerPanel.add(getCancelBtn());			
+			centerPanel.add(getCancelBtn());
 			centerPanel.add(getBtnRegister());
 			centerPanel.add(getChckbxRememberMe());
 		}
 		return centerPanel;
 	}
+
 	private JLabel getUsernameLbl() {
 		if (usernameLbl == null) {
 			usernameLbl = new JLabel("Username");
@@ -128,6 +159,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return usernameLbl;
 	}
+
 	private JLabel getPasswordLbl() {
 		if (passwordLbl == null) {
 			passwordLbl = new JLabel("Password");
@@ -136,10 +168,12 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return passwordLbl;
 	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setBorder(new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel.setBorder(new TitledBorder(null, "Login",
+					TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panel.setBounds(28, 26, 350, 98);
 			panel.setLayout(null);
 			panel.add(getUsernameLbl());
@@ -149,6 +183,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return panel;
 	}
+
 	private JTextField getUsernameTxt() {
 		if (usernameTxt == null) {
 			usernameTxt = new JTextField();
@@ -157,6 +192,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return usernameTxt;
 	}
+
 	private JPasswordField getPasswordTxt() {
 		if (passwordTxt == null) {
 			passwordTxt = new JPasswordField();
@@ -165,6 +201,7 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return passwordTxt;
 	}
+
 	private JLabel getStatusLbl() {
 		if (statusLbl == null) {
 			statusLbl = new JLabel("Status: ");
@@ -174,90 +211,98 @@ public class LoginScreenLayout extends JFrame {
 		}
 		return statusLbl;
 	}
+
 	private JButton getSignInBtn() {
 		if (signInBtn == null) {
 			signInBtn = new JButton("Sign In");
 			signInBtn.setHorizontalAlignment(SwingConstants.LEFT);
 			signInBtn.setIcon(new ImageIcon("resource\\signin.png"));
 			signInBtn.setBounds(46, 197, 98, 23);
-			
+
 			signInBtn.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+
 					User user = new User();
-					user.setUsername(getUsernameTxt().getText()); //user.setUsername(usernameTxt.getText());
+					user.setUsername(getUsernameTxt().getText()); // user.setUsername(usernameTxt.getText());
 					user.setPassword(new String(getPasswordTxt().getPassword()));
-					
+
 					UserDoa userDoa;
-										
+
 					try {
 						userDoa = new UserDoa();
-						
-						boolean valid= userDoa.validate(user);
-						
-						if(valid){
+
+						boolean valid = userDoa.validate(user);
+
+						if (valid) {
+							if (chckbxRememberMe.isSelected() == true) {
+
+								prefs.put("userName", usernameTxt.getText());
+								prefs.put("password",
+										new String(passwordTxt.getPassword()));
+								WindowManager.ui.put("pref", prefs);
+							}
+
 							switchToStudMangScreen();
-						}else{
-							statusLbl.setText("Status: Either Username or Password Invalid!!!");
+						} else {
+							statusLbl
+									.setText("Status: Either Username or Password Invalid!!!");
 						}
-																	
-					} catch (ClassNotFoundException |SQLException e1) {
+
+					} catch (ClassNotFoundException | SQLException e1) {
 						e1.printStackTrace();
-					} 
-					
-				
-					
-					
-					
+					}
+
 				}
 			});
-			
+
 		}
 		return signInBtn;
 	}
+
 	private JButton getCancelBtn() {
 		if (cancelBtn == null) {
 			cancelBtn = new JButton("Cancel");
 			cancelBtn.setHorizontalAlignment(SwingConstants.LEFT);
 			cancelBtn.setIcon(new ImageIcon("resource\\cancel.png"));
 			cancelBtn.setBounds(154, 197, 100, 23);
-			
+
 			cancelBtn.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					WindowManager.ui.clear();
 					System.exit(0);
 				}
 			});
-			
-		}		
-		
+
+		}
+
 		return cancelBtn;
 	}
-	
-	private void switchToStudMangScreen(){
-				
-		StudentManagement studMngWindow = new StudentManagement(usernameTxt.getText());
+
+	private void switchToStudMangScreen() {
+		StudentManagement studMngWindow = new StudentManagement(
+				usernameTxt.getText());
 		WindowManager.ui.put("StudentManagement", studMngWindow);
-		
+
 		studMngWindow.setVisible(true);
-		
-		LoginScreenLayout loginWindow=(LoginScreenLayout) WindowManager.ui.get("LoginScreenLayout");
-		
+
+		LoginScreenLayout loginWindow = (LoginScreenLayout) WindowManager.ui
+				.get("LoginScreenLayout");
+
 		loginWindow.clearData();
 		loginWindow.setVisible(false);
-		
-		
+		// }
+
 	}
-	
-	private void clearData(){
+
+	private void clearData() {
 		passwordTxt.setText("");
 		statusLbl.setText("Status: ");
+		chckbxRememberMe.setSelected(false);
 	}
-	
 
 	private JButton getBtnRegister() {
 		if (btnRegister == null) {
@@ -266,26 +311,28 @@ public class LoginScreenLayout extends JFrame {
 			btnRegister.setIcon(new ImageIcon("resource\\new _user.png"));
 			btnRegister.setBounds(263, 197, 115, 23);
 			btnRegister.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					switchToUserManagement();
-					
+
 				}
 			});
 		}
 		return btnRegister;
 	}
-	
-	private void switchToUserManagement(){
-		LoginScreenLayout loginScreen = (LoginScreenLayout)WindowManager.ui.get("LoginScreenLayout");
+
+	private void switchToUserManagement() {
+		LoginScreenLayout loginScreen = (LoginScreenLayout) WindowManager.ui
+				.get("LoginScreenLayout");
 		loginScreen.setVisible(false);
-		
+
 		UserManagement userManagement = new UserManagement();
 		WindowManager.ui.put("UserManagement", userManagement);
 		userManagement.setVisible(true);
-		
+
 	}
+
 	private JCheckBox getChckbxRememberMe() {
 		if (chckbxRememberMe == null) {
 			chckbxRememberMe = new JCheckBox("Remember Me");

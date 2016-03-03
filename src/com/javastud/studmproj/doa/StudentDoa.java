@@ -110,8 +110,12 @@ public class StudentDoa {
 		PreparedStatement stmt = conn
 				.prepareStatement("DELETE FROM student where id=?");
 		stmt.setInt(1, id);
-		boolean b = stmt.execute();
-		return b;
+		int rowUpdated = stmt.executeUpdate();
+		if (rowUpdated > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public Student getInsertedStudent(int id) throws SQLException {
@@ -130,7 +134,7 @@ public class StudentDoa {
 		return stud;
 	}
 
-	public void updateStud(Student stud) throws SQLException {
+	public boolean updateStud(Student stud) throws SQLException {
 		PreparedStatement stmt = conn
 				.prepareStatement("UPDATE student SET name=?, address=?, birthdate=?, rollno=?, faculty=?, semester=?, collegename=?, gender=? WHERE id=?");
 		stmt.setString(1, stud.getName());
@@ -143,7 +147,11 @@ public class StudentDoa {
 		stmt.setString(8, stud.getGender());
 		stmt.setInt(9, stud.getId());
 
-		stmt.executeUpdate();
+		if(stmt.executeUpdate()>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }
