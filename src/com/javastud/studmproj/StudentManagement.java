@@ -533,19 +533,18 @@ public class StudentManagement extends JFrame {
 		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}
-		
-		
-//		if ((Preferences) WindowManager.ui.get("pref") != null) {
-//			try {
-//				Preferences prefs = (Preferences) WindowManager.ui.get("pref");
-//			//	prefs.put("userName", "aaaa");
-//				prefs.clear();
-//				WindowManager.ui.put("pref", prefs);
-//			} catch (BackingStoreException e) {
-//				e.printStackTrace();
-//			}
-//			
-//		}
+
+		// if ((Preferences) WindowManager.ui.get("pref") != null) {
+		// try {
+		// Preferences prefs = (Preferences) WindowManager.ui.get("pref");
+		// // prefs.put("userName", "aaaa");
+		// prefs.clear();
+		// WindowManager.ui.put("pref", prefs);
+		// } catch (BackingStoreException e) {
+		// e.printStackTrace();
+		// }
+		//
+		// }
 		LoginScreenLayout loginWindow = (LoginScreenLayout) WindowManager.ui
 				.get("LoginScreenLayout");
 		loginWindow.setVisible(true);
@@ -646,38 +645,68 @@ public class StudentManagement extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int row = studTable.getSelectedRow();
-					int id = (int) studTable.getValueAt(row, 0);
-
-					try {
-						boolean b = studDoa.deleteStudent(id);
-
-						if (b) {
-							JOptionPane.showMessageDialog(null,
-									"Student Record Deleted Successfully of id="
-											+ id);
-						} else {
-							JOptionPane.showMessageDialog(null,
-									"ERROR!! Record cannot be deleted. ");
-						}
-
-						showAllStudents();
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+					int count = studTable.getSelectedRowCount();
+					if (count == 0) {
+						JOptionPane.showMessageDialog(null,
+								"Please select row to be deleted!! ");
+					} else if (count == 1) {
+						int row = studTable.getSelectedRow();
+						deleteSingleRow(row);
+					} else {
+						int rows[] = studTable.getSelectedRows();
+						deleteMultipleRow(rows);
 					}
-
 				}
 			});
 		}
 		return btnDelete;
+	}
+	
+	private void deleteMultipleRow(int rows[]){
+		int j=0;
+		for (int i : rows) {			
+			deleteSingleRow(i-j);
+			j++;
+		}
+		
+	}
+
+	private void deleteSingleRow(int row) {
+
+		int option = JOptionPane.showConfirmDialog(null,
+				"Are you sure want to delete record of id = "+row, null,
+				JOptionPane.YES_NO_OPTION);
+		if (option == JOptionPane.YES_OPTION) {
+			int id = (int) studTable.getValueAt(row, 0);
+
+			try {
+				boolean b = studDoa.deleteStudent(id);
+
+				if (b) {
+					JOptionPane.showMessageDialog(null,
+							"Student Record Deleted Successfully of id=" + id);
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"ERROR!! Record cannot be deleted. ");
+				}
+
+				showAllStudents();
+
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
 	}
 
 	private JComboBox getSemesterComboBox() {
 		if (semesterComboBox == null) {
 			semesterComboBox = new JComboBox();
 			semesterComboBox.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			semesterComboBox.setModel(new DefaultComboBoxModel(new String[] {"Select Semester", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"}));
+			semesterComboBox.setModel(new DefaultComboBoxModel(new String[] {
+					"Select Semester", "First", "Second", "Third", "Fourth",
+					"Fifth", "Sixth", "Seventh", "Eighth" }));
 			semesterComboBox.setBounds(294, 82, 103, 22);
 		}
 		return semesterComboBox;
