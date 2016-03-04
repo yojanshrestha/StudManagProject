@@ -97,8 +97,8 @@ public class LoginScreenLayout extends JFrame {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		contentPane.add(getRightPanel(), BorderLayout.EAST);
 		contentPane.add(getCenterPanel(), BorderLayout.CENTER);
-		prefUser = prefs.get("userName", "$$$$$$$$$$");
-		if (prefUser.equals("$$$$$$$$$$") == false) {
+		prefUser = prefs.get("userName", "");
+		if (prefUser.equals("") == false) {
 			skip = true;
 			WindowManager.ui.put("pref", prefs);
 		}
@@ -241,7 +241,7 @@ public class LoginScreenLayout extends JFrame {
 								prefs.put("userName", usernameTxt.getText());
 								prefs.put("password",
 										new String(passwordTxt.getPassword()));
-								WindowManager.ui.put("pref", prefs);
+								// WindowManager.ui.put("pref", prefs);  not needed
 							}
 
 							switchToStudMangScreen();

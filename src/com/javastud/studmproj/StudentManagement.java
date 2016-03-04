@@ -527,19 +527,25 @@ public class StudentManagement extends JFrame {
 	}
 
 	private void switchToLoginScreen() {
-		if ((Preferences) WindowManager.ui.get("pref") != null) {
-			try {
-				Preferences prefs = (Preferences) WindowManager.ui.get("pref");
-//				prefs.put("userName", "aaaa");
-				prefs.clear();
-				WindowManager.ui.put("pref", prefs);
-			} catch (BackingStoreException e) {
-				e.printStackTrace();
-			}
-			// prefs.put("userName", "a22");
-			// prefs.put("password", "a22");
-			// }
+		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		try {
+			prefs.clear();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
 		}
+		
+		
+//		if ((Preferences) WindowManager.ui.get("pref") != null) {
+//			try {
+//				Preferences prefs = (Preferences) WindowManager.ui.get("pref");
+//			//	prefs.put("userName", "aaaa");
+//				prefs.clear();
+//				WindowManager.ui.put("pref", prefs);
+//			} catch (BackingStoreException e) {
+//				e.printStackTrace();
+//			}
+//			
+//		}
 		LoginScreenLayout loginWindow = (LoginScreenLayout) WindowManager.ui
 				.get("LoginScreenLayout");
 		loginWindow.setVisible(true);
