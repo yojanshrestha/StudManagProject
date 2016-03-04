@@ -68,39 +68,19 @@ public class StudentDoa {
 		stud.setSemester(rs.getString("semester"));
 		stud.setCollegeName(rs.getString("collegename"));
 		stud.setGender(rs.getString("gender"));
-		stud.setAddress(rs.getString("address"));
-
-		// for testing in searched sql
-		// int a=stud.getId();
-		// JOptionPane.showMessageDialog(null, a);
-
+		stud.setAddress(rs.getString("address"));	
 		return stud;
 	}
 
 	public List<Student> searchStudent(String searchTxt, String searchKey)
 			throws SQLException {
-
-		// SQL MISTAKE
-
-		PreparedStatement stmt = conn
-				.prepareStatement("SELECT *FROM student WHERE ? = ?");
-		stmt.setString(1, searchKey);
-		stmt.setString(2, searchTxt);
-
-		// stmt.setString(2, "%"+ searchTxt+ "%" );
-
-		// works
-		// PreparedStatement stmt =
-		// conn.prepareStatement("SELECT *FROM student WHERE  name = ?");
-		// stmt.setString(1, searchTxt );
-
-		ResultSet rs = stmt.executeQuery();
-
+		Statement stmt = conn.createStatement();
 		List<Student> students = new ArrayList<Student>();
-
+		ResultSet rs = stmt.executeQuery("SELECT *FROM student WHERE "+searchKey+" LIKE '%"+searchTxt+"%'");
 		while (rs.next()) {
-
-			students.add(copyResultToStudent(rs));
+			Student stud = copyResultToStudent(rs);
+			students.add(stud);
+			
 		}
 
 		return students;
@@ -147,9 +127,9 @@ public class StudentDoa {
 		stmt.setString(8, stud.getGender());
 		stmt.setInt(9, stud.getId());
 
-		if(stmt.executeUpdate()>0){
+		if (stmt.executeUpdate() > 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

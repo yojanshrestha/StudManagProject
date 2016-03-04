@@ -671,9 +671,7 @@ public class StudentManagement extends JFrame {
 		if (semesterComboBox == null) {
 			semesterComboBox = new JComboBox();
 			semesterComboBox.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			semesterComboBox.setModel(new DefaultComboBoxModel(new String[] {
-					"Select Semester", "First", "Second", "Third", "Fourth",
-					"Fifth", "Sixth", "Seven", "Eight" }));
+			semesterComboBox.setModel(new DefaultComboBoxModel(new String[] {"Select Semester", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"}));
 			semesterComboBox.setBounds(294, 82, 103, 22);
 		}
 		return semesterComboBox;
