@@ -618,7 +618,9 @@ public class StudentManagement extends JFrame {
 	private JButton getBtnViewAll() {
 		if (btnViewAll == null) {
 			btnViewAll = new JButton("View All");
-			btnViewAll.setBounds(528, 333, 89, 23);
+			btnViewAll.setIcon(new ImageIcon("resource\\viewall.png"));
+			btnViewAll.setHorizontalAlignment(SwingConstants.LEFT);
+			btnViewAll.setBounds(528, 333, 108, 23);
 			btnViewAll.addActionListener(new ActionListener() {
 
 				@Override
@@ -674,7 +676,7 @@ public class StudentManagement extends JFrame {
 	private void deleteSingleRow(int row) {
 
 		int option = JOptionPane.showConfirmDialog(null,
-				"Are you sure want to delete record of id = "+row, null,
+				"Are you sure want to delete record!! ", null,
 				JOptionPane.YES_NO_OPTION);
 		if (option == JOptionPane.YES_OPTION) {
 			int id = (int) studTable.getValueAt(row, 0);
@@ -780,8 +782,10 @@ public class StudentManagement extends JFrame {
 										"ERROR!! Record not updated!! ");
 							}
 							clearData();
+							saveBtn.setVisible(true);
+							btnUpdate.setVisible(false);
 							showAllStudents();
-
+							
 						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();

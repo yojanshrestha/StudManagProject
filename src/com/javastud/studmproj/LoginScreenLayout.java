@@ -48,6 +48,8 @@ public class LoginScreenLayout extends JFrame {
 	Preferences prefs = Preferences.userNodeForPackage(getClass());
 	static boolean skip = false;
 	public static String prefUser;
+	private JButton btnShowPass;
+	private JButton btnHide;
 
 	/**
 	 * Launch the application.
@@ -180,6 +182,8 @@ public class LoginScreenLayout extends JFrame {
 			panel.add(getPasswordLbl());
 			panel.add(getUsernameTxt());
 			panel.add(getPasswordTxt());
+			panel.add(getBtnShowPass());
+			panel.add(getBtnHide());
 		}
 		return panel;
 	}
@@ -340,5 +344,39 @@ public class LoginScreenLayout extends JFrame {
 			chckbxRememberMe.setBounds(64, 131, 133, 23);
 		}
 		return chckbxRememberMe;
+	}
+	private JButton getBtnShowPass() {
+		if (btnShowPass == null) {
+			btnShowPass = new JButton("");
+			btnShowPass.setIcon(new ImageIcon("resource\\showPass.png"));
+			btnShowPass.setBounds(286, 67, 20, 20);
+			btnShowPass.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					passwordTxt.setEchoChar((char)0);
+					btnShowPass.setVisible(false);
+					btnHide.setVisible(true);
+				}
+			});
+		}
+		return btnShowPass;
+	}
+	private JButton getBtnHide() {
+		if (btnHide == null) {
+			btnHide = new JButton("New button");
+			btnHide.setIcon(new ImageIcon("resource\\hide.png"));
+			btnHide.setBounds(286, 67, 20, 20);
+			btnHide.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					btnHide.setVisible(false);
+					btnShowPass.setVisible(true);
+					passwordTxt.setEchoChar('*');
+				}
+			});
+		}
+		return btnHide;
 	}
 }
