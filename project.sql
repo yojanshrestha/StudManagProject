@@ -31,11 +31,7 @@ CREATE TABLE `student` (
   `collegename` varchar(255) DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
-
-/*Data for the table `student` */
-
-insert  into `student`(`id`,`name`,`address`,`birthdate`,`rollno`,`faculty`,`semester`,`collegename`,`gender`) values (1,'yojan','patan','2049-12-26','22','B.Sc.CSIT','Seven','PMC','Male'),(2,'dinesh','pesicola','1992-12-27','45','science','Seven','PMC','Male'),(4,'sajan','balkhu','2045-12-31','100','management','8','pinnacle','Male'),(5,'sajan','balkhu','2045-12-31','100','management','8','pinnacle','Male'),(6,'sajan','balkhu','2049-12-26','100','management','8','pinnacle','Male'),(7,'sajan','balkhu','1992-12-27','100','management','8','pinnacle','Male'),(8,'asdf','asdf','2049-12-26','asdfsda','asdf','asdf','asdf','Male'),(9,'asdf','asdf','2049-12-26','asdfsda','asdf','sdfasdfasdf','asdf','Male'),(10,'asdf','asdfasdfsadfsad','2049-12-26','asdfsda','asdf','sdfasdfasdf','asdf','Male'),(14,'asdfasdf','asdf','2049-12-26','asdf','asdf','asdf','asdf','Female'),(17,'afd','sdafsdfs','2049-12-26','sdafsdf','asdfasdf','sadfsdf','asdfsdaf','Female'),(18,'yourname','sdafsdfs','2049-12-26','sdafsdf','asdfasdf','sadfsdf','asdfsdaf','Female'),(19,'name','asdfsadfsdf','2049-12-26','fsadf','asdfsadf','asdfsdaf','sadfsadfsd','Female'),(20,'asdf','asdf','2049-12-26','sadf','asdf','Seven','asd','Male'),(22,'asdfsdf','sdfsd','2049-12-26','asdfsd','asdfsdafsdf','Fifth','sadfsdf','Female'),(25,'salil','lagankhel','2049-12-26','22','BIM','Seven','NCIT','Male');
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `user` */
 
@@ -47,10 +43,6 @@ CREATE TABLE `user` (
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
-/*Data for the table `user` */
-
-insert  into `user`(`id`,`username`,`password`) values (1,'admin','admin'),(2,'yojan','yojan'),(3,'sajan','sajan'),(4,'abcd','abcd'),(5,'asdf','123'),(11,'salil','salil');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
